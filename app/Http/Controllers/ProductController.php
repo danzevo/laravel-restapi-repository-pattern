@@ -113,4 +113,10 @@ class ProductController extends Controller
         }
     }
 
+    public function katalog() {
+        $product = Product::with('category')->latest()->
+                    where('user_id', auth()->user()->id)->get();
+
+        return view('pages/katalog/index', compact('product'));
+    }
 }

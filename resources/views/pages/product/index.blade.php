@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'Product')
+@section('title', 'Produk')
 
 @section('content_header')
-    <h1>Product</h1>
+    <h1>Produk</h1>
 @stop
 
 @section('content')
@@ -20,18 +20,18 @@
                 </div>
             @endif
             <div class="row">
-              <button type="button" class="btn btn-primary mt-3 ml-3" onclick="$('#InputModal').modal('show');resetForm()">+ Add</button>
+              <button type="button" class="btn btn-primary mt-3 ml-3" onclick="$('#InputModal').modal('show');resetForm()">+ Tambah</button>
             </div>
             <div class="table-responsive mt-4">
                 <table id="product" class="table table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>Price</th>
-                            <th>Category</th>
-                            <th>Action</th>
+                            <th>Nama</th>
+                            <th>Deskripsi</th>
+                            <th>Harga</th>
+                            <th>Kategori</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
 
@@ -89,7 +89,7 @@
           </div>
           <div class="form-group row">
             <div class="col-md-6 col-12">
-            <label for="deskripsi" class="col-sm-6 col-form-label">Product</label>
+            <label for="deskripsi" class="col-sm-6 col-form-label">Produk</label>
                 <label class="label" data-toggle="tooltip" title="" data-original-title="Change image product"
                     aria-describedby="tooltip733556">
                     <img class="rounded" id="avatar" width="160" height="160"
@@ -185,8 +185,8 @@ function loadList() {
                                     data-harga = '+row.harga+' \
                                     data-category_id = '+row.category_id+' \
                                     data-image = '+row.image+' \
-                                onclick="editProduct(this)" data-toggle="modal" data-target="#InputModal"><i class="fa fa-pencil"></i> edit</a>&nbsp;';
-                    result += '<a class="btn btn-warning btn-sm" onclick="destroy('+row.id+')"><i class="fa fa-pencil"></i> Delete</a>';
+                                onclick="editProduct(this)" data-toggle="modal" data-target="#InputModal"><i class="fa fa-pencil"></i> ubah</a>&nbsp;';
+                    result += '<a class="btn btn-warning btn-sm" onclick="destroy('+row.id+')"><i class="fa fa-pencil"></i> edit</a>';
                         return result;
                 }
             }

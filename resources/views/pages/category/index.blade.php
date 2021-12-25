@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'Category')
+@section('title', 'Kategori')
 
 @section('content_header')
-    <h1>Category</h1>
+    <h1>Kategori</h1>
 @stop
 
 @section('content')
@@ -20,15 +20,15 @@
                 </div>
             @endif
             <div class="row">
-              <button type="button" class="btn btn-primary mt-3 ml-3" onclick="$('#InputModal').modal('show');resetForm()">+ Add</button>
+              <button type="button" class="btn btn-primary mt-3 ml-3" onclick="$('#InputModal').modal('show');resetForm()">+ Tambah</button>
             </div>
             <div class="table-responsive mt-4">
                 <table id="category" class="table table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Name</th>
-                            <th>Action</th>
+                            <th>Nama</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
 
@@ -102,8 +102,8 @@ function loadList() {
                     var result = '<a class="btn btn-success btn-sm" \
                                     data-id = '+row.id+' \
                                     data-nama = '+row.nama+' \
-                                onclick="editCategory(this)" data-toggle="modal" data-target="#InputModal"><i class="fa fa-pencil"></i> edit</a>&nbsp;';
-                    result += '<a class="btn btn-warning btn-sm" onclick="destroy('+row.id+')"><i class="fa fa-pencil"></i> Delete</a>';
+                                onclick="editCategory(this)" data-toggle="modal" data-target="#InputModal"><i class="fa fa-pencil"></i> ubah</a>&nbsp;';
+                    result += '<a class="btn btn-warning btn-sm" onclick="destroy('+row.id+')"><i class="fa fa-pencil"></i> delete</a>';
                         return result;
                 }
             }
