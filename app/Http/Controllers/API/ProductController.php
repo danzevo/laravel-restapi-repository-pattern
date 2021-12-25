@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -10,11 +11,6 @@ use File;
 
 class ProductController extends Controller
 {
-    public function index() {
-        $category = Category::all();
-        return view('pages/product/index', compact('category'));
-    }
-
     public function getData() {
         $data = Product::with(['category'])->latest()->
                 where('user_id', auth()->user()->id)->get();
@@ -93,30 +89,4 @@ class ProductController extends Controller
             return response()->json($message)->setStatusCode(400);
 		}
 	}
-
-
-    public function upload_product(Request $request)
-    {
-        $file = new Filesystem;
-        $file->cleanDirectory(public_path('temp_product'));
-        if ($request->hasFile('avatar')) {
-
-            $filename = $request->avatar->getClientOriginalName(); // getting file extension
-            $filename = preg_replace('/\s/', '-', $filename);
-
-            $destinationPath = 'temp_product'; // upload path
-            $extension = $request->avatar->getClientOriginalExtension(); // getting file extension
-
-            $nama_baru = $filename;
-
-            $request->avatar->move(public_path("$destinationPath"), $nama_baru);
-        }
-    }
-
-    public function katalog() {
-        $product = Product::with('category')->latest()->
-                    where('user_id', auth()->user()->id)->get();
-
-        return view('pages/katalog/index', compact('product'));
-    }
 }
