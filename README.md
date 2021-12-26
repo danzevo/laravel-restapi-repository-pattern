@@ -11,9 +11,10 @@
 
 feature : 
 1. Auth
-2. crud product (upload product using ajax, description with ckeditor)
-3. display catalog product
-4. Rest api using sanctum
+2. crud product (datatable, upload product using ajax, description with ckeditor)
+3. crud category
+4. display catalog product
+5. Rest api using sanctum
 
 ## Installation
 1. cp .env.example .env
