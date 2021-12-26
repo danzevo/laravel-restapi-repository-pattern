@@ -7,10 +7,13 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## laravel crud with adminlte
+## laravel crud with adminlte + restapi
+
 feature : 
 1. Auth
-2. Rest api with sanctum
+2. crud product (upload product using ajax, description with ckeditor)
+3. display catalog product
+4. Rest api using sanctum
 
 ## Installation
 1. cp .env.example .env
