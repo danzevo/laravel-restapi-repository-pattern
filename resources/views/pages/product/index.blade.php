@@ -181,12 +181,12 @@ function loadList() {
                     var result = '<a class="btn btn-success btn-sm" \
                                     data-id = '+row.id+' \
                                     data-nama = '+row.nama+' \
-                                    data-deskripsi = '+row.deskripsi+' \
+                                    data-deskripsi = \''+row.deskripsi+'\' \
                                     data-harga = '+row.harga+' \
                                     data-category_id = '+row.category_id+' \
                                     data-image = '+row.image+' \
                                 onclick="editProduct(this)" data-toggle="modal" data-target="#InputModal"><i class="fa fa-pencil"></i> ubah</a>&nbsp;';
-                    result += '<a class="btn btn-warning btn-sm" onclick="destroy('+row.id+')"><i class="fa fa-pencil"></i> edit</a>';
+                    result += '<a class="btn btn-warning btn-sm" onclick="destroy('+row.id+')"><i class="fa fa-trash"></i> hapus</a>';
                         return result;
                 }
             }

@@ -52,13 +52,23 @@ class ProductController extends Controller
         $data_input['harga'] = str_replace('.', '', $data_input['harga']);
         $data_input['user_id'] = auth()->user()->id;
 
+        $nama_lama = '';
         if ($req->hasFile('image')) {
-            $filename = $req->image->getClientOriginalName(); // getting file extension
-            $filename = preg_replace('/\s/', '-', $filename);
+            if($id) {
+                $product = Product::find($id);
+                $nama_lama = $product->image;
+            }
 
-            $nama_baru = time() . "_" . $filename;
-            $data_input['image'] = $nama_baru;
-            File::move(public_path('temp_product/avatar.jpg'), public_path('image_product/' . $nama_baru));
+            if($nama_lama != $req->file('image')->getClientOriginalName() && file_exists(public_path('temp_product/avatar.jpg'))) {
+                $filename = $req->image->getClientOriginalName(); // getting file extension
+                $filename = preg_replace('/\s/', '-', $filename);
+
+                $nama_baru = time() . "_" . $filename;
+                $data_input['image'] = $nama_baru;
+                File::move(public_path('temp_product/avatar.jpg'), public_path('image_product/' . $nama_baru));
+            } else {
+                unset($data_input['image']);
+            }
         }
 
         $product = Product::updateOrCreate(['id' => $id], $data_input);
