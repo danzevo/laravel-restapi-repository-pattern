@@ -11,7 +11,7 @@
     @foreach($product as $row)
         <div class="col-lg-3 d-flex align-items-stretch">
             <div class="card mb-3">
-                <img src="{{ asset('image_product/'.$row->image) }}" class="card-img-top" alt="{{ $row->image }}">
+                <img style="padding:25px" src="{{ asset('image_product/'.$row->image) }}" class="card-img-top" alt="{{ $row->image }}">
                 <div class="card-body">
                     <p class="text-center"><strong>{{ $row->nama }}</strong></p>
                     <p class="text-center"><strong>{{ 'Rp. '.number_format($row->harga, 0, ',', '.') }}</strong></p>
