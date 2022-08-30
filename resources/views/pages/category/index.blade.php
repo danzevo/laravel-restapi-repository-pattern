@@ -137,8 +137,10 @@ function editCategory(e) {
   {
     let id = document.getElementById('id').value;
     let nama = document.getElementById('nama').value;
-
     var url = "{{ url('admin/category/save') }}";
+    if(id != '') {
+        url = "{{ url('admin/category/update/') }}/"+id;
+    }
 
     if(nama == ''){
           Swal.fire("Error!", "Name is required", "error");
@@ -148,6 +150,9 @@ function editCategory(e) {
             var form_data = new FormData();
                 form_data.append('id', id);
                 form_data.append('nama', nama);
+                if(id != '') {
+                    form_data.append('_method', 'PUT');
+                }
 
             $.ajax({
                 type: "POST",
@@ -171,7 +176,7 @@ function editCategory(e) {
                     Swal.fire("Success!", result.message, "success");
                     loadList();
                 } ,error: function(xhr, status, error) {
-                    Swal.fire("Error!", xhr.responseJSON.errors.nama, "error");
+                    Swal.fire("Error!", xhr.responseJSON.message.nama[0], "error");
                     document.getElementById("submitCategory").disabled = false;
                 },
 

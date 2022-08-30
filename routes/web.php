@@ -30,5 +30,6 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('admin/category', [App\Http\Controllers\CategoryController::class, 'index'])->name('category');
     Route::get('admin/category/get-data', [App\Http\Controllers\CategoryController::class, 'getData']);
     Route::post('admin/category/save', [App\Http\Controllers\CategoryController::class, 'store']);
+    Route::put('admin/category/update/{id}', [App\Http\Controllers\CategoryController::class, 'update']);
     Route::post('admin/category/destroy/{id}', [App\Http\Controllers\CategoryController::class, 'destroy']);
 });

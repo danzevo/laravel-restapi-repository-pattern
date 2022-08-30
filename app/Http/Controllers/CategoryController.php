@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use DB;
+use Validator;
 
 class CategoryController extends Controller
 {
@@ -12,61 +14,110 @@ class CategoryController extends Controller
     }
 
     public function getData() {
-        $data = Category::orderBy('nama')->get();
+        try{
+            $data = Category::orderBy('nama')->get();
 
-        return datatables()->of($data)
-        ->addIndexColumn()
-        ->make(true);
+            return datatables()->of($data)
+            ->addIndexColumn()
+            ->make(true);
+        }catch(\Throwable $e) {
+            DB::rollback();
+            $message = array();
+            $message['message'] = $e->getMessage();
+            return response()->json($message)->setStatusCode(400);
+        }
     }
 
-
     public function store(Request $req){
-        $id = $req->id?:0;
-
-        if(!$id) {
-            $validated = $req->validate([
+        DB::BeginTransaction();
+        try {
+            $validated = Validator::make($req->all(), [
                 'nama' => 'required|unique:categories|max:25',
             ]);
-        }
 
-        $data_input = $req->all();
+            if ($validated->fails()) {
+                $message = array();
+                $message['message'] = $validated->errors();
 
-        if($id) {
-            $data_input['updated_at'] = date('Y-m-d H:i:s');
-        } else {
-            $data_input['created_at'] = date('Y-m-d H:i:s');
-        }
+                return response()->json($message)->setStatusCode(400);
+            }
 
-        $category = Category::updateOrCreate(['id' => $id], $data_input);
+            $category = Category::create(['nama' => $req->nama]);
 
-        if ($category) {
 			$message = array();
             $message['message'] = 'Data saved successfully';
 
+            DB::commit();
             return response()->json($message)->setStatusCode(200);
-		}else{
+		}catch(\Throwable $e) {
+            DB::rollback();
+            $message = array();
+            $message['message'] = $e->getMessage();
+            return response()->json($message)->setStatusCode(400);
+        }
+	}
+
+    public function update($id, Request $req){
+        DB::BeginTransaction();
+        try {
+            $validated = Validator::make($req->all(), [
+                'nama' => 'required|unique:categories,nama,'.$id.'|max:25',
+            ]);
+
+            if ($validated->fails()) {
+                $message = array();
+                $message['message'] = $validated->errors();
+
+                return response()->json($message)->setStatusCode(400);
+            }
+
+            $category = Category::find($id);
+
+            if(!$category) {
+                $message = array();
+                $message['message'] = 'Data not found';
+
+                return response()->json($message)->setStatusCode(400);
+            }
+
+            $category->update(['nama' => $req->nama]);
 
 			$message = array();
-            $message['message'] = 'Data failed to save';
+            $message['message'] = 'Data updated successfully';
 
+            DB::commit();
+            return response()->json($message)->setStatusCode(200);
+		}catch(\Throwable $e) {
+            DB::rollback();
+            $message = array();
+            $message['message'] = $e->getMessage();
             return response()->json($message)->setStatusCode(400);
-		}
+        }
 	}
 
 	public function destroy($id){
-        $category = Category::where('id', $id)->first();
+        DB::BeginTransaction();
+        try {
+            $category = Category::where('id', $id)->first();
 
-        if ($category->delete()) {
+            if(!$category) {
+                $message = array();
+                $message['message'] = 'Data not found';
+
+                return response()->json($message)->setStatusCode(400);
+            }
+
+            $category->delete();
 			$message = array();
             $message['message'] = 'Data deleted successfully';
 
+            DB::commit();
             return response()->json($message)->setStatusCode(200);
-		}else{
-
-			$message = array();
-            $message['message'] = 'Data failed to delete';
-
+		}catch(\Throwable $e) {
+            DB::rollback();
+            $message = array();
+            $message['message'] = $e->getMessage();
             return response()->json($message)->setStatusCode(400);
-		}
+        }
 	}
 }
