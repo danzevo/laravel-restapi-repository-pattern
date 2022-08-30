@@ -34,13 +34,23 @@ class ProductController extends Controller
     public function store(Request $req){
         $id = $req->id?:0;
 
-        $validated = $req->validate([
-            'nama' => 'required|unique:products|max:50',
-            'deskripsi' => 'required',
-            'harga' => 'required',
-            'category_id' => 'required',
-            'image' => 'required',
-        ]);
+        if(!$id) {
+            $validated = $req->validate([
+                'nama' => 'required|unique:products|max:50',
+                'deskripsi' => 'required',
+                'harga' => 'required',
+                'category_id' => 'required',
+                'image' => 'required',
+            ]);
+        } else {
+            $validated = $req->validate([
+                'nama' => 'required|unique:products,nama,'.$id.'|max:50',
+                'deskripsi' => 'required',
+                'harga' => 'required',
+                'category_id' => 'required',
+                'image' => 'required',
+            ]);
+        }
 
         $data_input = $req->all();
         if($id) {
