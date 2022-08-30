@@ -16,14 +16,13 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('nama', 50);
-            $table->text('deskripsi');
-            $table->double('harga');
+            $table->text('deskripsi')->nullable();
+            $table->decimal('harga', 32, 2)->default(0);
             $table->foreignId('category_id')
                     ->constrained()
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
-            $table->string('image');
-            $table->index(['category_id', 'created_at']);
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

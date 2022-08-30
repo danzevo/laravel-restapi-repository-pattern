@@ -21,7 +21,6 @@ class CategoryController extends Controller
             ->addIndexColumn()
             ->make(true);
         }catch(\Throwable $e) {
-            DB::rollback();
             $message = array();
             $message['message'] = $e->getMessage();
             return response()->json($message)->setStatusCode(400);

@@ -25,6 +25,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('admin/product/katalog', [App\Http\Controllers\ProductController::class, 'katalog'])->name('katalog');
     Route::get('admin/product/get-data', [App\Http\Controllers\ProductController::class, 'getData']);
     Route::post('admin/product/save', [App\Http\Controllers\ProductController::class, 'store']);
+    Route::put('admin/product/update/{id}', [App\Http\Controllers\ProductController::class, 'update']);
     Route::post('admin/product/destroy/{id}', [App\Http\Controllers\ProductController::class, 'destroy']);
     Route::post('admin/upload-product', [App\Http\Controllers\ProductController::class, 'upload_product']);
     Route::get('admin/category', [App\Http\Controllers\CategoryController::class, 'index'])->name('category');

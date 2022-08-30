@@ -180,7 +180,7 @@ function loadList() {
                 render: function (data, type, row, meta) {
                     var result = '<a class="btn btn-success btn-sm" \
                                     data-id = '+row.id+' \
-                                    data-nama = '+row.nama+' \
+                                    data-nama = "'+row.nama+'" \
                                     data-deskripsi = \''+row.deskripsi+'\' \
                                     data-harga = '+row.harga+' \
                                     data-category_id = '+row.category_id+' \
@@ -215,7 +215,7 @@ function editProduct(e) {
         $('#id').val($(e).data('id'));
         $('#nama').val($(e).data('nama'));
         CKEDITOR.instances.deskripsi.setData($(e).data('deskripsi'));
-        $('#harga').val($(e).data('harga'));
+        $('#harga').val(numberWithCommas(parseInt($(e).data('harga'))));
         $('#category_id').val($(e).data('category_id')).trigger('change');
 
         if($(e).data('image') != 'undefined') {
@@ -227,6 +227,10 @@ function editProduct(e) {
         $('.alert').hide();
     }
 
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
   function saveProduct()
   {
     let id = document.getElementById('id').value;
@@ -237,6 +241,9 @@ function editProduct(e) {
     let image = document.getElementById("input").files[0];
 
     var url = "{{ url('admin/product/save') }}";
+    if(id != '') {
+        url = "{{ url('admin/product/update') }}/"+id;
+    }
 
     if(nama == ''){
           Swal.fire("Error!", "Name is required", "error");
@@ -250,6 +257,9 @@ function editProduct(e) {
                 form_data.append('harga', harga);
                 form_data.append('category_id', category_id);
                 form_data.append('image', image);
+                if(id != '') {
+                    form_data.append('_method', 'PUT');
+                }
 
             $.ajax({
                 type: "POST",
@@ -273,7 +283,7 @@ function editProduct(e) {
                     Swal.fire("Success!", result.message, "success");
                     loadList();
                 } ,error: function(xhr, status, error) {
-                    Swal.fire("Error!", JSON.stringify(xhr.responseJSON.errors), "error");
+                    Swal.fire("Error!", 'Failed updated product', "error");
                     document.getElementById("submitProduct").disabled = false;
                 },
 
