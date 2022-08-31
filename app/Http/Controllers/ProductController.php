@@ -43,6 +43,7 @@ class ProductController extends Controller
         try{
             $validated = Validator::make($req->all(), [
                 'nama' => 'required|unique:products|max:50',
+                'deskripsi' => 'required',
                 'harga' => 'required',
                 'category_id' => 'required|integer',
                 'image' => 'required',
@@ -57,7 +58,7 @@ class ProductController extends Controller
 
             $item = array(
                 'nama'      => $req->nama,
-                'deskripsi' => $req->deskripsi ?? null,
+                'deskripsi' => $req->deskripsi,
                 'harga'     => str_replace('.', '', $req->harga),
                 'category_id' => $req->category_id,
                 'user_id'     => auth()->user()->id,
@@ -94,6 +95,7 @@ class ProductController extends Controller
         try{
             $validated = Validator::make($req->all(), [
                 'nama' => 'required|unique:products,nama,'.$id.'|max:50',
+                'deskripsi' => 'required',
                 'harga' => 'required',
                 'category_id' => 'required|integer',
                 'image' => 'required',
@@ -116,7 +118,7 @@ class ProductController extends Controller
 
             $item = array(
                 'nama'      => $req->nama,
-                'deskripsi' => $req->deskripsi ?? null,
+                'deskripsi' => $req->deskripsi,
                 'harga'     => str_replace('.', '', $req->harga),
                 'category_id' => $req->category_id,
                 'user_id'     => auth()->user()->id,
