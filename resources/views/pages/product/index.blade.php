@@ -223,7 +223,7 @@ function editProduct(e) {
         $('#harga').val(numberWithCommas(parseInt($(e).data('harga'))));
         $('#category_id').val($(e).data('category_id')).trigger('change');
 
-        if($(e).data('image') != 'undefined') {
+        if($(e).data('image') != null) {
         $('#avatar').prop('src', '{{ asset('image_product') }}/'+$(e).data('image'));
         } else {
         $('#avatar').prop('src', '{{ asset('image_product') }}/default-foto.png');
