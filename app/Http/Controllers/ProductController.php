@@ -50,7 +50,7 @@ class ProductController extends Controller
 
             if ($validated->fails()) {
                 $message = array();
-                $message['message'] = $validated->errors();
+                $message['message'] = implode(',',$validated->errors()->all());
 
                 return response()->json($message)->setStatusCode(400);
             }
@@ -101,7 +101,7 @@ class ProductController extends Controller
 
             if ($validated->fails()) {
                 $message = array();
-                $message['message'] = $validated->errors();
+                $message['message'] = implode(',',$validated->errors()->all());
 
                 return response()->json($message)->setStatusCode(400);
             }
@@ -175,7 +175,6 @@ class ProductController extends Controller
             return response()->json($message)->setStatusCode(400);
         }
 	}
-
 
     public function upload_product(Request $request)
     {
