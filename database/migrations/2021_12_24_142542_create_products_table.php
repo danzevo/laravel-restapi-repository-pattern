@@ -22,6 +22,10 @@ class CreateProductsTable extends Migration
                     ->constrained()
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
+            $table->foreignId('user_id')
+                    ->constrained()
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
             $table->string('image')->nullable();
             $table->timestamps();
         });
