@@ -7,6 +7,11 @@
 @stop
 
 @section('content')
+<style>
+.modal-body img {
+  max-width: 90%;
+}
+</style>
 <div class="col-lg-12">
     <div class="card">
         <div class="card-body">
@@ -205,7 +210,7 @@ function loadList() {
             $(".dt-buttons .btn").removeClass("btn-secondary")
         },
         drawCallback: function (settings) {
-            console.log(settings.json);
+            // console.log(settings.json);
         }
     });
 
@@ -283,7 +288,13 @@ function numberWithCommas(x) {
                     Swal.fire("Success!", result.message, "success");
                     loadList();
                 } ,error: function(xhr, status, error) {
-                    Swal.fire("Error!", 'Failed updated product', "error");
+                    // Swal.fire("Error!", 'Failed updated product', "error");
+                    // console.log(xhr.responseJSON.message);
+                    Swal.fire({
+                    title: 'Error!',
+                    icon: 'error',
+                    html: xhr.responseJSON.message,
+                    });
                     document.getElementById("submitProduct").disabled = false;
                 },
 
@@ -393,7 +404,7 @@ function resetForm(){
       $modal.on('shown.bs.modal', function () {
         cropper = new Cropper(image, {
           aspectRatio: 1,
-          viewMode: 0,
+          viewMode: 0
         });
       }).on('hidden.bs.modal', function () {
         cropper.destroy();
