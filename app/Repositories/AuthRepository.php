@@ -4,13 +4,14 @@ namespace App\Repositories;
 
 use App\Interfaces\AuthInterface;
 use App\Traits\{BugsnagTrait, ResponseBuilder};
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+use App\Models\User\UserCredit;
+use App\Http\Resources\User\UserResource;
 use Throwable;
 use DB;
-use Illuminate\Support\Facades\Hash;
 use Auth;
 use Validator;
-use App\Models\User;
-use App\Http\Resources\User\UserResource;
 
 class AuthRepository implements AuthInterface
 {
@@ -30,6 +31,21 @@ class AuthRepository implements AuthInterface
 
             if($request->filled('role')) {
                 $user->syncRoles($request->role);
+
+                // user credit
+                if($request->role != 'owner') {
+                    if($request->role == 'premium')
+                        $credit = 40;
+                    elseif($request->role == 'regular')
+                        $credit = 20;
+
+                    $userCredit = array(
+                        'user_id' => $user->id,
+                        'credit' => $credit,
+                    );
+
+                    UserCredit::create($userCredit);
+                }
             }
 
             $data = array(
@@ -80,7 +96,6 @@ class AuthRepository implements AuthInterface
         try {
             return $this->sendResponse(new UserResource(auth()->user()), null);
         } catch (Throwable $e) {
-            dd($e);
             $this->report($e);
 
             return $this->sendError(400, 'Whoops, looks like something went wrong #profile');
