@@ -18,6 +18,7 @@ class AuthRepository implements AuthInterface
 
     public function register($request)
     {
+        DB::beginTransaction();
         try {
             $user = User::create([
                 'name' => $request->name,
@@ -27,14 +28,21 @@ class AuthRepository implements AuthInterface
 
             $token = $user->createToken('auth_token')->plainTextToken;
 
+            if($request->filled('role')) {
+                $user->syncRoles($request->role);
+            }
+
             $data = array(
-                'data' => $user,
+                'data' => new UserResource($user),
                 'access_token' => $token,
                 'token_type' => 'Bearer'
             );
 
+            DB::commit();
             return $this->sendResponse($data, 'Pendaftaran berhasil');
         } catch (Throwable $e) {
+            dd($e);
+            DB::rollback();
             $this->report($e);
 
             return $this->sendError(400, 'Whoops, looks like something went wrong #register');

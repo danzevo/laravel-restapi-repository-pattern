@@ -18,6 +18,7 @@ class UserResource extends JsonResource
             'id' => enkrip($this->id),
             'name' => $this->name,
             'email' => $this->email,
+            'role' => $this->getRoleNames()
         ];
     }
 }
