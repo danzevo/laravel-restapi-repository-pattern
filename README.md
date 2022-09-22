@@ -11,16 +11,16 @@
 
 feature : 
 1. Auth
-2. crud product (datatable, upload product using ajax, description with ckeditor)
-3. crud category
-4. display catalog product
-5. Rest api using sanctum
+2. report error log using bugsnag
+3. repository pattern
+4. trait response builder & bugsnag
+5. validation request, try catch
 
 ## Installation
 1. cp .env.example .env
-2. Composer Install
-3. npm Install
-4. php artisan migrate
-5. npm run dev
-6. php artisan key:generate
+2. composer Install
+3. php artisan migrate
+4. php artisan key:generate
+5. copy bugsnag_api from .env.example to .env
+6. copy app_secret_key from .env.example to .env
 7. composer dump-autoload
