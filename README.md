@@ -7,7 +7,7 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## laravel crud with adminlte + restapi
+## laravel rest api using repository pattern
 
 feature : 
 1. Auth
@@ -15,11 +15,12 @@ feature :
 3. repository pattern
 4. trait response builder & bugsnag
 5. validation request, try catch
-
+6. role
+7. update image using image intervention (has trait upload base64 image)
 ## Installation
 1. cp .env.example .env
 2. composer Install
-3. php artisan migrate
+3. php artisan migrate --seed
 4. php artisan key:generate
 5. copy bugsnag_api from .env.example to .env
 6. copy app_secret_key from .env.example to .env

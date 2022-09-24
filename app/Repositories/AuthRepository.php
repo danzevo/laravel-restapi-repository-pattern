@@ -11,7 +11,6 @@ use App\Http\Resources\User\UserResource;
 use Throwable;
 use DB;
 use Auth;
-use Validator;
 
 class AuthRepository implements AuthInterface
 {
@@ -33,19 +32,19 @@ class AuthRepository implements AuthInterface
                 $user->syncRoles($request->role);
 
                 // user credit
-                if($request->role != 'owner') {
-                    if($request->role == 'premium')
-                        $credit = 40;
-                    elseif($request->role == 'regular')
-                        $credit = 20;
+                if($request->role == 'premium')
+                    $credit = 40;
+                elseif($request->role == 'regular')
+                    $credit = 20;
+                elseif($request->role == 'owner')
+                    $credit = 0;
 
-                    $userCredit = array(
-                        'user_id' => $user->id,
-                        'credit' => $credit,
-                    );
+                $userCredit = array(
+                    'user_id' => $user->id,
+                    'credit' => $credit,
+                );
 
-                    UserCredit::create($userCredit);
-                }
+                UserCredit::create($userCredit);
             }
 
             $data = array(
@@ -57,7 +56,6 @@ class AuthRepository implements AuthInterface
             DB::commit();
             return $this->sendResponse($data, 'Pendaftaran berhasil');
         } catch (Throwable $e) {
-            dd($e);
             DB::rollback();
             $this->report($e);
 
@@ -70,7 +68,7 @@ class AuthRepository implements AuthInterface
         try {
             if (!Auth::attempt($request->only('email', 'password')))
             {
-                return $this->error(401, null, 'Unauthorized');
+                return $this->sendError(401, 'Unauthorized');
             }
 
             $user = User::where('email', $request['email'])->firstOrFail();

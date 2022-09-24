@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserCreditsTable extends Migration
+class CreateRoomsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,17 @@ class CreateUserCreditsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_credits', function (Blueprint $table) {
+        Schema::create('rooms', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')
+            $table->foreignId('kos_id')
                     ->constrained()
-                    ->onUpdate('cascade')
-                    ->onDelete('cascade');
-            $table->bigInteger('credit')->default(0);
-            $table->bigInteger('credit_deduction')->default(0);
+                    ->cascadeOnDelete()
+                    ->cascadeOnUpdate();
+            $table->string('size', 75);
+            $table->integer('total_room')->default(0);
+            $table->integer('available_room')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -32,6 +34,6 @@ class CreateUserCreditsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_credits');
+        Schema::dropIfExists('rooms');
     }
 }
