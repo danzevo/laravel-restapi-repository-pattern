@@ -15,6 +15,8 @@ class RepositoryProvider extends ServiceProvider
     {
         //Auth
 		$this->app->bind("App\Interfaces\AuthInterface","App\Repositories\AuthRepository");
+        //Kos
+		$this->app->bind("App\Interfaces\Kos\KosInterface","App\Repositories\Kos\KosRepository");
     }
 
     /**

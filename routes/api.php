@@ -25,4 +25,20 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [App\Http\Controllers\API\AuthController::class, 'logout']);
     // API route for profile user
     Route::get('/profile', [App\Http\Controllers\API\AuthController::class, 'profile']);
+
+    //only owner can crud kos
+    Route::group(['middleware' => ['role:owner']], function () {
+        // API route for owner
+        Route::apiResource('/owner-kos', App\Http\Controllers\API\Kos\KosController::class);
+    });
+
+    //only regular / premium user can access
+    Route::group(['middleware' => ['role:regular|premium']], function () {
+        // API route for room availibility
+        Route::get('/room-availibility/{id}', [App\Http\Controllers\API\Kos\KosController::class, 'roomAvailibility']);
+    });
 });
+
+// Api route for users
+Route::get('/kost-list', [App\Http\Controllers\API\Kos\KosController::class, 'indexUser']);
+Route::get('/kost-list/{id}', [App\Http\Controllers\API\Kos\KosController::class, 'showUser']);

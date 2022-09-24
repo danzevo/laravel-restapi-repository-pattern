@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserCreditsTable extends Migration
+class CreateKosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,21 @@ class CreateUserCreditsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_credits', function (Blueprint $table) {
+        Schema::create('kos', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->decimal('price', 32, 2)->default(0);
+            $table->enum('kos_type' , ['putra', 'putri', 'campur'])->default('putra');
+            $table->longText('description')->nullable();
+            $table->string('kos_established', 4);
+            $table->string('room_type', 75)->nullable();
+            $table->string('admin_name', 75)->nullable();
             $table->foreignId('user_id')
                     ->constrained()
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
-            $table->bigInteger('credit')->default(0);
-            $table->bigInteger('credit_deduction')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -32,6 +38,6 @@ class CreateUserCreditsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_credits');
+        Schema::dropIfExists('kos');
     }
 }

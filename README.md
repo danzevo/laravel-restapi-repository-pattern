@@ -19,7 +19,7 @@ feature :
 ## Installation
 1. cp .env.example .env
 2. composer Install
-3. php artisan migrate
+3. php artisan migrate --seed
 4. php artisan key:generate
 5. copy bugsnag_api from .env.example to .env
 6. copy app_secret_key from .env.example to .env
