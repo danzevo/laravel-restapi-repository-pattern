@@ -16,7 +16,7 @@ trait ResponseBuilder
             'message' => $message,
         ];
 
-        return response()->json($response, 200);
+        return response()->json($response, $code);
     }
 
     public function sendError($code_custom, $error, $errorMessages = [], $code = 200)
@@ -31,7 +31,7 @@ trait ResponseBuilder
             $response['data'] = $errorMessages;
         }
 
-        return response()->json($response, $code);
+        return response()->json($response, $code_custom);
     }
 
     private function httpErrorMessage($code)
