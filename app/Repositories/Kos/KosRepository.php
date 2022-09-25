@@ -410,4 +410,32 @@ class KosRepository implements KosInterface
             return $this->sendError(400, 'Whoops, looks like something went wrong #show');
         }
     }
+
+    public function dashboard()
+    {
+        try {
+            $kos = Kos::select(DB::raw('count(kos.id) as count'), DB::raw('sum(rooms.total_room) as total_room'),
+                                DB::raw('sum(rooms.available_room) as available_room'))
+                        ->leftJoin(DB::raw('(
+                            select kos_id, sum(total_room) total_room, sum(available_room) available_room
+                                    from rooms
+                                    group by kos_id
+                                ) rooms'), 'rooms.kos_id', '=', 'kos.id')
+                        ->where('user_id', auth()->user()->id)->get();
+            $userCredit = UserCredit::where('user_id', auth()->user()->id)->first();
+
+            $item = [
+                'jumlah_kos' => $kos->pluck('count'),
+                'jumlah_kamar' => $kos->pluck('total_room'),
+                'jumlah_kamar_tersedia' => $kos->pluck('available_room'),
+                'jumlah_credit' => $userCredit->credit,
+            ];
+
+            return $this->sendResponse($item);
+        } catch (Throwable $e) {
+            $this->report($e);
+
+            return $this->sendError(400, 'Whoops, looks like something went wrong #dashboard');
+        }
+    }
 }

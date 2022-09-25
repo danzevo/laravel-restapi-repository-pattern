@@ -57,4 +57,9 @@ class KosController extends Controller
     {
         return $this->kosInterface->roomAvailibility($id);
     }
+
+    public function dashboard()
+    {
+        return $this->kosInterface->dashboard();
+    }
 }

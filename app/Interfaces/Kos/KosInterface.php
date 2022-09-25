@@ -19,4 +19,6 @@ interface KosInterface
     public function indexUser(oject $data);
 
     public function showUser(int $id);
+
+    public function dashboard();
 }
