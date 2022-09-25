@@ -78,7 +78,7 @@ class KosRepository implements KosInterface
         try {
             $kos = Kos::where('id', dekrip($id))->where('user_id', auth()->user()->id)->first();
             if(!$kos)
-                return $this->sendError(400, 'Kos not found');
+                return $this->sendError(404, 'Kos not found');
 
             return $this->sendResponse(new KosDetailResource($kos));
         } catch (Throwable $e) {
@@ -151,7 +151,7 @@ class KosRepository implements KosInterface
             }
 
             DB::commit();
-            return $this->sendResponse(null, 'Tambah data berhasil');
+            return $this->sendResponse(null, 'Tambah data berhasil', 201);
         } catch (Throwable $e) {
             DB::rollBack();
             $this->report($e);
@@ -184,6 +184,11 @@ class KosRepository implements KosInterface
                 if($request->filled('facility') && count($request->facility) > 0) {
                     $dataFacility = Facility::where('kos_id', $id)->first();
 
+                    if($dataFacility)
+                        $idFacility = $dataFacility->id;
+                    else
+                        $idFacility = 0;
+
                     $facility = array(
                         'kos_id' => $id,
                         'public_facility' => $request->facility['public_facility'],
@@ -192,7 +197,7 @@ class KosRepository implements KosInterface
                         'park_facility' => $request->facility['park_facility'],
                     );
 
-                    $dataFacility->update($facility);
+                    Facility::updateOrCreate(['id' => $idFacility], $facility);
                 }
 
                 if($request->filled('kos_image') && count($request->kos_image) > 0) {
@@ -238,6 +243,11 @@ class KosRepository implements KosInterface
                 if($request->filled('address') && count($request->address) > 0) {
                     $dataAddress = Address::where('kos_id', $id)->first();
 
+                    if($dataAddress)
+                        $idAddress = $dataAddress->id;
+                    else
+                        $idAddress = 0;
+
                     $address = array(
                         'kos_id' => $id,
                         'province' => $request->address['province'],
@@ -246,11 +256,16 @@ class KosRepository implements KosInterface
                         'address' => $request->address['address'],
                     );
 
-                    $dataAddress->update($address);
+                    Address::updateOrCreate(['id' => $idAddress], $address);
                 }
 
                 if($request->filled('room') && count($request->room) > 0) {
                     $dataRoom = Room::where('kos_id', $id)->first();
+
+                    if($dataRoom)
+                        $idRoom = $dataRoom->id;
+                    else
+                        $idRoom = 0;
 
                     $room = array(
                         'kos_id' => $id,
@@ -259,7 +274,7 @@ class KosRepository implements KosInterface
                         'available_room' => $request->room['available_room'],
                     );
 
-                    $dataRoom->update($room);
+                    Room::updateOrCreate(['id' => $idRoom], $room);
                 }
             }
 
@@ -281,7 +296,7 @@ class KosRepository implements KosInterface
             $id = dekrip($id);
             $kos = Kos::where('id', $id)->where('user_id', auth()->user()->id)->first();
             if(!$kos)
-                return $this->error(400, null, 'Kos not found');
+                return $this->error(404, null, 'Kos not found');
 
             if($kos->delete()) {
                 $kosImage = KosImage::where('kos_id', $id)->get();
@@ -315,13 +330,13 @@ class KosRepository implements KosInterface
         try {
             $userCredit = UserCredit::where('user_id', auth()->user()->id)->first();
 
-            if($userCredit->credit - $userCredit->credit_deduction > 0) {
+            if($userCredit && $userCredit->credit - $userCredit->credit_deduction > 0) {
                 // cek ketersediaan kamar & bukan pemilik kos yang mengaksesnya
                 $room = Room::where('kos_id', dekrip($id))->whereHas('kos', function($query) {
                             $query->where('user_id', '!=', auth()->user()->id);
                         })->first();
                 if(!$room)
-                    return $this->sendError(400, 'Room not found');
+                    return $this->sendError(404, 'Room not found');
 
                 $userCredit->credit_deduction += 5;
                 $userCredit->save();
@@ -386,11 +401,10 @@ class KosRepository implements KosInterface
         try {
             $kos = Kos::where('id', dekrip($id))->first();
             if(!$kos)
-                return $this->sendError(400, 'Kos not found');
+                return $this->sendError(404, 'Kos not found');
 
             return $this->sendResponse(new KosDetailResource($kos));
         } catch (Throwable $e) {
-            dd($e);
             $this->report($e);
 
             return $this->sendError(400, 'Whoops, looks like something went wrong #show');

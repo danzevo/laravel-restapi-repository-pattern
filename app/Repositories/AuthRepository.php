@@ -54,7 +54,7 @@ class AuthRepository implements AuthInterface
             );
 
             DB::commit();
-            return $this->sendResponse($data, 'Pendaftaran berhasil');
+            return $this->sendResponse($data, 'Pendaftaran berhasil', 201);
         } catch (Throwable $e) {
             DB::rollback();
             $this->report($e);
