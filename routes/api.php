@@ -30,6 +30,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::group(['middleware' => ['role:owner']], function () {
         // API route for owner
         Route::apiResource('/owner-kos', App\Http\Controllers\API\Kos\KosController::class);
+        // API route for dashboard
+        Route::get('/owner-kos-dashboard', [App\Http\Controllers\API\Kos\KosController::class, 'dashboard']);
     });
 
     //only regular / premium user can access

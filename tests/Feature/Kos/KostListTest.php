@@ -163,4 +163,33 @@ class KostListTest extends TestCase
         $response = $this->actingAs($user2)->getJson('/api/room-availibility/'.enkrip($kos->id));
         $response->assertStatus(200);
     }
+
+    public function testDashboardAsGuest() {
+        $response = $this->getJson('/api/owner-kos-dashboard/');
+        $response->assertStatus(401);
+    }
+
+    public function testDashboardAsUser() {
+        $user = User::factory()->create();
+        $user->assignRole('premium');
+
+        $kos = Kos::factory()
+                    ->hasRoom(2)
+                    ->create(['user_id' => $user->id]);
+
+        $response = $this->actingAs($user)->getJson('/api/owner-kos-dashboard');
+        $response->assertStatus(403);
+    }
+
+    public function testDashboard() {
+        $user = User::factory()->hasUserCredit()->create();
+        $user->assignRole('owner');
+
+        $kos = Kos::factory()
+                    ->hasRoom(2)
+                    ->create(['user_id' => $user->id]);
+
+        $response = $this->actingAs($user)->getJson('/api/owner-kos-dashboard');
+        $response->assertStatus(200);
+    }
 }
