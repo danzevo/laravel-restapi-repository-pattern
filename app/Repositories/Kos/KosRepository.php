@@ -76,7 +76,8 @@ class KosRepository implements KosInterface
     public function show($id)
     {
         try {
-            $kos = Kos::where('id', dekrip($id))->where('user_id', auth()->user()->id)->first();
+            $kos = Kos::with(['kosImage', 'room', 'facility', 'address'])
+                        ->where('id', dekrip($id))->where('user_id', auth()->user()->id)->first();
             if(!$kos)
                 return $this->sendError(404, 'Kos not found');
 
@@ -399,7 +400,8 @@ class KosRepository implements KosInterface
     public function showUser($id)
     {
         try {
-            $kos = Kos::where('id', dekrip($id))->first();
+            $kos = Kos::with(['kosImage', 'room', 'facility', 'address'])
+                        ->where('id', dekrip($id))->first();
             if(!$kos)
                 return $this->sendError(404, 'Kos not found');
 
