@@ -17,6 +17,5 @@ feature :
 4. php artisan migrate --seed
 5. php artisan key:generate
 6. php artisan migrate --env=testing (for database testing)
-7. composer dump-autoload
-8. import postman collection 'mamikos.postman_collection.json' to postman or insomnia for list api
-9. php artisan serve
+7. import postman collection 'mamikos.postman_collection.json' to postman or insomnia for list api
+8. php artisan serve
